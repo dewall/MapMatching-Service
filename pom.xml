@@ -27,6 +27,7 @@
         <jsonsimple.version>1.1.1</jsonsimple.version>
         <joda.version>2.9.9</joda.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <jts.version>1.13</jts.version>
         
     </properties>
     
@@ -35,6 +36,17 @@
             <groupId>com.graphhopper</groupId>
             <artifactId>graphhopper-map-matching-core</artifactId>
             <version>${graphhopper.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts</artifactId>
+            <version>${jts.version}</version>
         </dependency>
         
         <!-- Spring dependencies -->
