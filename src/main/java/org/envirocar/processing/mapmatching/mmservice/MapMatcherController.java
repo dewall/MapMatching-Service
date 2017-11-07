@@ -15,7 +15,11 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
+import java.io.IOException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.io.IOUtils;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +47,13 @@ public class MapMatcherController {
         this.mapMatcher = mapMatcher;
     }
 
-    @RequestMapping(value = "/ec-matcher", method = RequestMethod.POST)
+    @RequestMapping(value = "/match", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) {
-        return null;
+    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws IOException, ParseException {
+        ServletInputStream inputStream = request.getInputStream();
+        String requestString = IOUtils.toString(inputStream);
+        mapMatcher.computeMapMatching(EnvirocarTrack.fromString(requestString));
+        return ResponseEntity.ok(null);
     }
 
 }

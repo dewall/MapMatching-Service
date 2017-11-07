@@ -15,7 +15,11 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
+import com.graphhopper.matching.EdgeMatch;
 import com.graphhopper.matching.MapMatching;
+import com.graphhopper.matching.MatchResult;
+import com.graphhopper.util.GPXEntry;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +29,22 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MapMatcherService {
-    
+
     private final MapMatching mapMatching;
-    
+
     @Autowired
-    public MapMatcherService(MapMatching mapMatching){
+    public MapMatcherService(MapMatching mapMatching) {
         this.mapMatching = mapMatching;
     }
 
+    public MapMatchingResult computeMapMatching(EnvirocarTrack track) {
+        List<GPXEntry> entries = track.getEntries();
+        MatchResult matchResult = mapMatching.doWork(track.getEntries());
+        
+        List<EdgeMatch> matches = matchResult.getEdgeMatches();
+        
+        return null;
+        
+//        MapMatchingResult result = new MapMatchingResult();
+    }
 }

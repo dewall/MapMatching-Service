@@ -15,6 +15,8 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.matching.MapMatching;
 import com.graphhopper.reader.osm.GraphHopperOSM;
@@ -25,6 +27,8 @@ import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.weighting.FastestWeighting;
 import com.graphhopper.routing.weighting.Weighting;
 import com.graphhopper.util.Parameters;
+import org.envirocar.processing.mapmatching.mmservice.serde.MMSerializationModule;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,9 +45,10 @@ public class MapMatcherConfiguration {
     }
 
     @Bean
-    public GraphHopper provideGraphHopper(AbstractFlagEncoder encoder) {
+    public GraphHopper provideGraphHopper(AbstractFlagEncoder encoder,
+            @Value("${graphhopper.osmdata.location}") String osmdata) {
         GraphHopper hopper = new GraphHopperOSM();
-        hopper.setDataReaderFile("./map-data/muenster-regbez-latest.osm.pbf");
+        hopper.setDataReaderFile(osmdata);
         hopper.setGraphHopperLocation("./target/mapmatchingtest");
         hopper.setEncodingManager(new EncodingManager(encoder));
         hopper.getCHFactoryDecorator().setEnabled(false);
@@ -58,5 +63,12 @@ public class MapMatcherConfiguration {
         AlgorithmOptions algoOptions = new AlgorithmOptions(algorithm, weighting);
         MapMatching mapMatching = new MapMatching(hopper, algoOptions);
         return mapMatching;
+    }
+    
+    @Bean
+    public ObjectMapper provideObjectMapper(){
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .registerModule(new MMSerializationModule());
     }
 }
