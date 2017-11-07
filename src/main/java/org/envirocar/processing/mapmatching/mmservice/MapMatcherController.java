@@ -15,6 +15,7 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -37,14 +38,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class MapMatcherController {
 
     private final MapMatcherService mapMatcher;
+    private final ObjectMapper objectMapper;
 
     /**
      *
      * @param mapMatcher
      */
     @Autowired
-    public MapMatcherController(MapMatcherService mapMatcher) {
+    public MapMatcherController(MapMatcherService mapMatcher, ObjectMapper objectMapper) {
         this.mapMatcher = mapMatcher;
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "/match", method = RequestMethod.POST)
@@ -52,8 +55,10 @@ public class MapMatcherController {
     public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws IOException, ParseException {
         ServletInputStream inputStream = request.getInputStream();
         String requestString = IOUtils.toString(inputStream);
-        mapMatcher.computeMapMatching(EnvirocarTrack.fromString(requestString));
-        return ResponseEntity.ok(null);
+
+        // compute result
+        MapMatchingResult result = mapMatcher.computeMapMatching(EnvirocarTrack.fromString(requestString));
+        return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 
 }
