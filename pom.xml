@@ -6,7 +6,7 @@
     <version>0.1</version>
     <packaging>jar</packaging>
 
-    <name>enviroCar - MapMatching Service</name>
+    <name>enviroCar Processing - MapMatching Service</name>
     <description>MapMatching Service for enviroCar Tracks</description>
     
     <parent>
@@ -17,11 +17,14 @@
     </parent>
     
     <properties>
+        <docker.image.prefix>envirocar</docker.image.prefix>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.version>3.7.0</maven.compiler.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
         <maven.license.plugin.version>1.10.b1</maven.license.plugin.version>
+        <docker.plugin.version>1.0.0</docker.plugin.version>
         
         <graphhopper.version>0.9.0</graphhopper.version>
         <jsonsimple.version>1.1.1</jsonsimple.version>
@@ -82,6 +85,10 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <inherited>false</inherited>
@@ -105,6 +112,30 @@
                         <phase>process-resources</phase>
                         <goals>
                             <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker.plugin.version}</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <dockerDirectory>${project.basedir}/etc</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
                         </goals>
                     </execution>
                 </executions>
