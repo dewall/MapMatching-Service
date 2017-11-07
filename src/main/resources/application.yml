@@ -1,2 +1,5 @@
 spring.application.name: MapMatcher
 
+graphhopper:
+    osmdata:
+        location: map-data/muenster-regbez-latest.osm.pbf
