@@ -1,5 +1,8 @@
 spring.application.name: MapMatcher
 
+server:
+    port: 8080
+
 graphhopper:
     osmdata:
-        location: etc/map-data/muenster-regbez-latest.osm.pbf
+        location: app/map-data/muenster-regbez-latest.osm.pbf
