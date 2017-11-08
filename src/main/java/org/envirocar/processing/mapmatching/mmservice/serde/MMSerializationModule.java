@@ -27,7 +27,7 @@ import org.envirocar.processing.mapmatching.mmservice.MapMatchingResult;
 
 /**
  *
- * @author hafenkran
+ * @author dewall
  */
 public class MMSerializationModule extends SimpleModule implements GeoJSONConstants {
 

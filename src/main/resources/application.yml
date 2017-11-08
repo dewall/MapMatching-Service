@@ -5,4 +5,5 @@ server:
 
 graphhopper:
     osmdata:
-        location: app/map-data/muenster-regbez-latest.osm.pbf
+        location: etc/map-data/germany-latest.osm.pbf
+        
