@@ -6,4 +6,12 @@ server:
 graphhopper:
     osmdata:
         location: etc/map-data/germany-latest.osm.pbf
-        
+
+barefoot:
+    postgis:
+        host: localhost
+        port: 5432
+        database: nrw
+        table: bfmap_ways
+        user: osmuser
+        pass: pass

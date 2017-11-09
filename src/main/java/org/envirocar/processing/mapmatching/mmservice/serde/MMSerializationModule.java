@@ -31,6 +31,9 @@ import org.envirocar.processing.mapmatching.mmservice.MapMatchingResult;
  */
 public class MMSerializationModule extends SimpleModule implements GeoJSONConstants {
 
+    /**
+     * Constuctor.
+     */
     public MMSerializationModule() {
         addSerializer(new MapMatchingResultSerDe());
     }
@@ -39,7 +42,7 @@ public class MMSerializationModule extends SimpleModule implements GeoJSONConsta
 
         @Override
         public void serialize(MapMatchingResult value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-            LineString lineString = value.getMatchedString();
+            LineString lineString = value.getMatchedLineString();
 
             gen.writeStartObject();
             gen.writeStringField(GEOJSON_TYPE, lineString.getGeometryType());

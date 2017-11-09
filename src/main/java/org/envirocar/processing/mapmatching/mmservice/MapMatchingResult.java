@@ -22,14 +22,31 @@ import org.locationtech.jts.geom.LineString;
  * @author dewall
  */
 public class MapMatchingResult {
+
     private LineString matchedString;
-    
-    public MapMatchingResult(LineString matched){
+
+    /**
+     * Constructor.
+     */
+    public MapMatchingResult() {
+        this(null);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param matched
+     */
+    public MapMatchingResult(LineString matched) {
         this.matchedString = matched;
     }
 
-    public LineString getMatchedString() {
+    public LineString getMatchedLineString() {
         return matchedString;
+    }
+
+    public void setMatchedLineString(LineString matchedString) {
+        this.matchedString = matchedString;
     }
     
 }

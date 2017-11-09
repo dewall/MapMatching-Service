@@ -36,6 +36,11 @@
     
     <dependencies>
         <dependency>
+            <groupId>com.bmw-carit</groupId>
+            <artifactId>barefoot</artifactId>
+            <version>0.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.graphhopper</groupId>
             <artifactId>graphhopper-map-matching-core</artifactId>
             <version>${graphhopper.version}</version>
@@ -151,12 +156,12 @@
                     </resources>
                 </configuration>
                 <executions>
-                    <execution>
+<!--                    <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
         </plugins>
