@@ -19,8 +19,6 @@ import com.bmwcarit.barefoot.matcher.Matcher;
 import com.bmwcarit.barefoot.matcher.MatcherCandidate;
 import com.bmwcarit.barefoot.matcher.MatcherKState;
 import com.bmwcarit.barefoot.matcher.MatcherTransition;
-import com.bmwcarit.barefoot.road.BaseRoad;
-import com.bmwcarit.barefoot.roadmap.Road;
 import com.bmwcarit.barefoot.roadmap.Route;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
