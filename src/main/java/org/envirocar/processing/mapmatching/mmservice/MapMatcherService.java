@@ -15,11 +15,6 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
-import org.envirocar.processing.mapmatching.mmservice.graphhopper.GHEnvirocarTrack;
-import com.graphhopper.matching.MapMatching;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
  *
  * @author dewall

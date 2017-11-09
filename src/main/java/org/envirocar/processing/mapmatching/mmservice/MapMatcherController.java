@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.envirocar.processing.mapmatching.mmservice.barefoot.BFEnvirocarTrack;
 import org.envirocar.processing.mapmatching.mmservice.barefoot.BFMapMatcherService;
+import org.envirocar.processing.mapmatching.mmservice.graphhopper.GHMapMatcherService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class MapMatcherController {
      */
     @Autowired
     public MapMatcherController(
-            MapMatcherService mapMatcher,
+            GHMapMatcherService mapMatcher,
             BFMapMatcherService mapMatcherBF,
             ObjectMapper objectMapper) {
         this.mapMatcher = mapMatcher;
