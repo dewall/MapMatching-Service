@@ -22,7 +22,9 @@ import org.locationtech.jts.geom.LineString;
  * @author dewall
  */
 public class MapMatchingResult {
-
+    
+    // matchedPoints
+    // private List<MatchedPoint> matchedPoints;
     private LineString matchedString;
 
     /**
