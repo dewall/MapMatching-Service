@@ -5,11 +5,11 @@ server:
 
 graphhopper:
     osmdata:
-        location: etc/map-data/germany-latest.osm.pbf
+        location: etc/map-data/muenster-regbez-latest.osm.pbf
 
 barefoot:
     postgis:
-        host: localhost
+        host: mapserver
         port: 5432
         database: nrw
         table: bfmap_ways

@@ -1,7 +1,7 @@
 FROM java:8
 
 VOLUME  /tmp
-ADD map-data/ /app/map-data/    
+ADD map-data/ /etc/map-data/    
 ADD mmservice-0.1.jar /app/app.jar
 
 RUN bash -c 'touch /app/app.jar'

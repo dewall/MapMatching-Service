@@ -46,7 +46,7 @@ public class BFConfiguration {
             @Value("${barefoot.postgis.table}") String table,
             @Value("${barefoot.postgis.user}") String user,
             @Value("${barefoot.postgis.pass}") String password) throws JSONException, IOException {
-        Map<Short, Tuple<Double, Integer>> read = Loader.read("src/main/resources/road-types.json");
+        Map<Short, Tuple<Double, Integer>> read = Loader.read("/etc/map-data/road-types.json");
         return new PostGISReader(host, port, database, table, user, password, read);
     }
 
