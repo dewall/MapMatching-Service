@@ -27,13 +27,12 @@ import com.graphhopper.routing.weighting.Weighting;
 import com.graphhopper.util.Parameters;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  *
  * @author dewall
  */
-@Configuration
+//@Configuration
 public class GHConfiguration {
 
     @Bean

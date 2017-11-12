@@ -15,15 +15,14 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
-import org.envirocar.processing.mapmatching.mmservice.graphhopper.GHEnvirocarTrack;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
-import org.envirocar.processing.mapmatching.mmservice.barefoot.BFEnvirocarTrack;
 import org.envirocar.processing.mapmatching.mmservice.barefoot.BFMapMatcherService;
-import org.envirocar.processing.mapmatching.mmservice.graphhopper.GHMapMatcherService;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,32 +52,36 @@ public class MapMatcherController {
      */
     @Autowired
     public MapMatcherController(
-            GHMapMatcherService mapMatcher,
+            //            GHMapMatcherService mapMatcher,
             BFMapMatcherService mapMatcherBF,
             ObjectMapper objectMapper) {
-        this.mapMatcher = mapMatcher;
+//        this.mapMatcher = mapMatcher;
+        this.mapMatcher = null;
         this.mapMatcherBF = mapMatcherBF;
         this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "/graphhopper", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws IOException, ParseException {
+    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws
+            IOException, ParseException {
         String requestString = toInputString(request);
+        MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
         // compute result
-        MapMatchingResult result = mapMatcher.computeMapMatching(GHEnvirocarTrack.fromString(requestString));
+        MapMatchingResult result = mapMatcher.computeMapMatching(input);
         return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 
     @RequestMapping(value = "/barefoot", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchWithBarefoot(HttpServletRequest request) throws IOException, ParseException {
+    public ResponseEntity matchWithBarefoot(HttpServletRequest request) throws
+            IOException, ParseException {
         String requestString = toInputString(request);
-        BFEnvirocarTrack track = BFEnvirocarTrack.fromString(requestString);
+        MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
         // compute result
-        MapMatchingResult result = mapMatcherBF.computeMapMatching(track);
+        MapMatchingResult result = mapMatcherBF.computeMapMatching(input);
         return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 

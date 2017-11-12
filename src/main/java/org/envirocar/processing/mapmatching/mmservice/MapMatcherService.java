@@ -15,12 +15,15 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
+
 /**
  *
  * @author dewall
  */
-public interface MapMatcherService<T> {
+public interface MapMatcherService {
 
-    public MapMatchingResult computeMapMatching(T track);
+    public MapMatchingResult computeMapMatching(MapMatchingInput input);
 
 }

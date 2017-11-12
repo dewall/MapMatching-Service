@@ -27,31 +27,35 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
-import org.envirocar.processing.mapmatching.mmservice.MapMatchingResult;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
+import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dewall
  */
-@Component
-public class GHMapMatcherService implements MapMatcherService<GHEnvirocarTrack> {
+//@Component
+public class GHMapMatcherService implements MapMatcherService {
 
     private final MapMatching mapMatching;
     private final GeometryFactory geometryFactory;
 
     @Autowired
-    public GHMapMatcherService(MapMatching mapMatching, GeometryFactory geometryFactory) {
+    public GHMapMatcherService(MapMatching mapMatching,
+            GeometryFactory geometryFactory) {
         this.mapMatching = mapMatching;
         this.geometryFactory = geometryFactory;
     }
 
     @Override
-    public MapMatchingResult computeMapMatching(GHEnvirocarTrack track) {
-        List<GPXEntry> entries = track.getMeasurements();
-        MatchResult matchResult = mapMatching.doWork(track.getMeasurements());
+    public MapMatchingResult computeMapMatching(MapMatchingInput input) {
+        List<GPXEntry> entries = getAsGPXEntry(input.getCandidates());
+        MatchResult matchResult = mapMatching.doWork(entries);
 
         List<EdgeMatch> matches = matchResult.getEdgeMatches();
 
@@ -69,5 +73,14 @@ public class GHMapMatcherService implements MapMatcherService<GHEnvirocarTrack> 
                 coordinates.toArray(new Coordinate[coordinates.size()]));
 
         return new MapMatchingResult(lineString);
+    }
+
+    private List<GPXEntry> getAsGPXEntry(List<MapMatchingCandidate> candidates) {
+        return candidates.stream()
+                .map((t) -> new GPXEntry(
+                t.getPoint().getY(),
+                t.getPoint().getX(),
+                t.getTime().getTime()))
+                .collect(Collectors.toList());
     }
 }

@@ -45,21 +45,34 @@ public class BFConfiguration {
             @Value("${barefoot.postgis.database}") String database,
             @Value("${barefoot.postgis.table}") String table,
             @Value("${barefoot.postgis.user}") String user,
-            @Value("${barefoot.postgis.pass}") String password) throws JSONException, IOException {
-        Map<Short, Tuple<Double, Integer>> read = Loader.read("/etc/map-data/road-types.json");
-        return new PostGISReader(host, port, database, table, user, password, read);
+            @Value("${barefoot.postgis.pass}") String password) throws
+            JSONException, IOException {
+        Map<Short, Tuple<Double, Integer>> read = Loader.read(
+                "etc/map-data/road-types.json");
+        return new PostGISReader(host, port, database, table, user, password,
+                read);
     }
 
     @Bean
-    public RoadMap provideRoadMap(PostGISReader reader) throws SourceException, IOException {
+    public RoadMap provideRoadMap(PostGISReader reader) throws SourceException,
+            IOException {
         return RoadMap.Load(reader).construct();
     }
 
     @Bean
-    public Matcher provideMatcher(RoadMap map) {
-        return new Matcher(map,
+    public Matcher provideMatcher(RoadMap map,
+            @Value("${barefoot.matcher.sigma}") double sigma,
+            @Value("${barefoot.matcher.lambda}") double lambda,
+            @Value("${barefoot.matcher.maxradius}") double maxRadius,
+            @Value("${barefoot.matcher.maxdistance}") double maxDistance) {
+        Matcher matcher = new Matcher(map,
                 new Dijkstra<>(),
                 new TimePriority(),
                 new Geography());
+        matcher.setSigma(sigma);
+        matcher.setLambda(lambda);
+        matcher.setMaxDistance(maxDistance);
+        matcher.setMaxRadius(maxRadius);
+        return matcher;
     }
 }

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import java.io.IOException;
-import org.envirocar.processing.mapmatching.mmservice.MapMatchingResult;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 
 /**
  *
@@ -32,7 +32,7 @@ import org.envirocar.processing.mapmatching.mmservice.MapMatchingResult;
 public class MMSerializationModule extends SimpleModule implements GeoJSONConstants {
 
     /**
-     * Constuctor.
+     * Constructor.
      */
     public MMSerializationModule() {
         addSerializer(new MapMatchingResultSerDe());

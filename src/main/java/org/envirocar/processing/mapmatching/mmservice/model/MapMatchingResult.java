@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.envirocar.processing.mapmatching.mmservice;
+package org.envirocar.processing.mapmatching.mmservice.model;
 
 import org.locationtech.jts.geom.LineString;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author dewall
  */
 public class MapMatchingResult {
-    
-    // matchedPoints
-    // private List<MatchedPoint> matchedPoints;
-    private LineString matchedString;
+
+    private LineString matchedRoute;
+    private List<MatchedPoint> matchedPoints;
 
     /**
      * Constructor.
@@ -40,15 +41,41 @@ public class MapMatchingResult {
      * @param matched
      */
     public MapMatchingResult(LineString matched) {
-        this.matchedString = matched;
+        this(matched, new ArrayList<>());
+    }
+
+    public MapMatchingResult(LineString matchedRoute,
+            List<MatchedPoint> matchedPoints) {
+        this.matchedRoute = matchedRoute;
+        this.matchedPoints = matchedPoints;
     }
 
     public LineString getMatchedLineString() {
-        return matchedString;
+        return matchedRoute;
     }
 
     public void setMatchedLineString(LineString matchedString) {
-        this.matchedString = matchedString;
+        this.matchedRoute = matchedString;
     }
-    
+
+    public LineString getMatchedRoute() {
+        return matchedRoute;
+    }
+
+    public void setMatchedRoute(LineString matchedRoute) {
+        this.matchedRoute = matchedRoute;
+    }
+
+    public List<MatchedPoint> getMatchedPoints() {
+        return matchedPoints;
+    }
+
+    public void setMatchedPoints(List<MatchedPoint> matchedPoints) {
+        this.matchedPoints = matchedPoints;
+    }
+
+    public void addMatchedPoint(MatchedPoint matchedPoint) {
+        this.matchedPoints.add(matchedPoint);
+    }
+
 }
