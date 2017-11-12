@@ -20,16 +20,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
 import java.io.IOException;
+import java.util.List;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
+import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
+import static org.envirocar.processing.mapmatching.mmservice.serde.GeoJSONConstants.GEOJSON_TYPE;
 
 /**
  *
  * @author dewall
  */
-public class MMSerializationModule extends SimpleModule implements GeoJSONConstants {
+public class MMSerializationModule extends SimpleModule implements
+        GeoJSONConstants {
 
     /**
      * Constructor.
@@ -41,19 +44,21 @@ public class MMSerializationModule extends SimpleModule implements GeoJSONConsta
     private static final class MapMatchingResultSerDe extends JsonSerializer<MapMatchingResult> {
 
         @Override
-        public void serialize(MapMatchingResult value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-            LineString lineString = value.getMatchedLineString();
+        public void serialize(MapMatchingResult value, JsonGenerator gen,
+                SerializerProvider serializers)
+                throws IOException, JsonProcessingException {
 
             gen.writeStartObject();
-            gen.writeStringField(GEOJSON_TYPE, lineString.getGeometryType());
-            gen.writeArrayFieldStart(GEOJSON_COORDINATES);
+            gen.writeStringField(GEOJSON_TYPE, "FeatureCollection");
+            gen.writeArrayFieldStart(GEOJSON_FEATURES);
 
-            for (Coordinate point : lineString.getCoordinates()) {
-                gen.writeStartArray();
-                gen.writeNumber(point.x);
-                gen.writeNumber(point.y);
-                gen.writeEndArray();
+            List<MatchedPoint> matchedPoints = value.getMatchedPoints();
+            for (MatchedPoint point : matchedPoints) {
+                gen.writeObject(point.getPointOnRoad());
             }
+
+            LineString lineString = value.getMatchedLineString();
+            gen.writeObject(lineString);
 
             gen.writeEndArray();
             gen.writeEndObject();
