@@ -1,4 +1,19 @@
 /*
+ * Copyright (C) 2017 the enviroCar community
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -26,6 +41,9 @@ import static org.envirocar.processing.mapmatching.mmservice.serde.GeoJSONConsta
  */
 public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants {
 
+    /**
+     * Constructor.
+     */
     public JtsToGeoJSONModule() {
         addSerializer(new JTSPointSerializer());
         addSerializer(new JTSLineStringSerializer());
@@ -50,9 +68,14 @@ public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants
             gen.writeEndArray();
             gen.writeEndObject();
 
-            // properties
-            gen.writeObjectFieldStart(GEOJSON_PROPERTIES);
-            gen.writeEndObject();
+            // Properties
+            Object userData = t.getUserData();
+            if (userData == null) {
+                gen.writeObjectFieldStart(GEOJSON_PROPERTIES);
+                gen.writeEndObject();
+            } else {
+                gen.writeObjectField(GEOJSON_PROPERTIES, t.getUserData());
+            }
 
             gen.writeEndObject();
         }
@@ -78,6 +101,7 @@ public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants
             gen.writeStringField(GEOJSON_TYPE, t.getGeometryType());
             gen.writeArrayFieldStart(GEOJSON_COORDINATES);
 
+            // Coordinates
             for (Coordinate point : t.getCoordinates()) {
                 gen.writeStartArray();
                 gen.writeNumber(point.x);
@@ -88,9 +112,14 @@ public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants
             gen.writeEndArray();
             gen.writeEndObject();
 
-            // properties
-            gen.writeObjectFieldStart(GEOJSON_PROPERTIES);
-            gen.writeEndObject();
+            // Properties
+            Object userData = t.getUserData();
+            if (userData == null) {
+                gen.writeObjectFieldStart(GEOJSON_PROPERTIES);
+                gen.writeEndObject();
+            } else {
+                gen.writeObjectField(GEOJSON_PROPERTIES, t.getUserData());
+            }
 
             gen.writeEndObject();
         }

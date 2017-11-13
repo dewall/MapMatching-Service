@@ -21,8 +21,11 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
 import static org.envirocar.processing.mapmatching.mmservice.serde.GeoJSONConstants.GEOJSON_TYPE;
@@ -54,7 +57,12 @@ public class MMSerializationModule extends SimpleModule implements
 
             List<MatchedPoint> matchedPoints = value.getMatchedPoints();
             for (MatchedPoint point : matchedPoints) {
-                gen.writeObject(point.getPointOnRoad());
+                Map<String, Object> userData = new HashMap<>();
+                userData.put("osm_street_id", point.getOsmID());
+
+                Point pointOnRoad = point.getPointOnRoad();
+                pointOnRoad.setUserData(userData);
+                gen.writeObject(pointOnRoad);
             }
 
             LineString lineString = value.getMatchedLineString();
