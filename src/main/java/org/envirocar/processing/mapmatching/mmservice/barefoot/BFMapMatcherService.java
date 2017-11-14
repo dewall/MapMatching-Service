@@ -38,6 +38,8 @@ import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -50,15 +52,28 @@ public class BFMapMatcherService implements MapMatcherService {
     private final GeometryFactory geometryFactory;
     private final Matcher matcher;
 
+    private final int minDistance;
+    private final int minInterval;
+
     /**
      * Constructor.
      *
+     * @param minDistance
      * @param geometryFactory
+     * @param minInterval
      * @param matcher
      */
-    public BFMapMatcherService(GeometryFactory geometryFactory, Matcher matcher) {
+    @Autowired
+    public BFMapMatcherService(
+            @Value("${barefoot.matcher.mindistance}") int minDistance,
+            @Value("${barefoot.matcher.mininterval}") int minInterval,
+            GeometryFactory geometryFactory,
+            Matcher matcher) {
         this.geometryFactory = geometryFactory;
         this.matcher = matcher;
+
+        this.minDistance = minDistance;
+        this.minInterval = minInterval;
     }
 
     @Override
@@ -66,7 +81,7 @@ public class BFMapMatcherService implements MapMatcherService {
         MapMatchingResult result = new MapMatchingResult();
 
         MatcherKState state = this.matcher.mmatch(
-                getAsMatcherSamples(input.getCandidates()), 1, 5000);
+                getAsMatcherSamples(input.getCandidates()), this.minDistance, this.minInterval);
 
         List<Coordinate> coordinates = new ArrayList<>();
         for (MatcherCandidate candidate : state.sequence()) {

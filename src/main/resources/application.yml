@@ -9,12 +9,12 @@ graphhopper:
 
 barefoot:
     matcher:
-        sigma: 10.0
-        lambda: 0.0
-        maxradius: 200
-        maxdistance: 2000 
-        mindistance: 0
-        mininterval: 1000
+        sigma: 45
+        lambda: 0.1
+        maxradius: 75
+        maxdistance: 1000 
+        mindistance: 20
+        mininterval: 5000
     postgis:
         host: localhost
         port: 5432

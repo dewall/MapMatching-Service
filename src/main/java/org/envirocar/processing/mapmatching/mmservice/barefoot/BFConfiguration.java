@@ -17,9 +17,9 @@ package org.envirocar.processing.mapmatching.mmservice.barefoot;
 
 import com.bmwcarit.barefoot.matcher.Matcher;
 import com.bmwcarit.barefoot.road.PostGISReader;
+import com.bmwcarit.barefoot.roadmap.Distance;
 import com.bmwcarit.barefoot.roadmap.Loader;
 import com.bmwcarit.barefoot.roadmap.RoadMap;
-import com.bmwcarit.barefoot.roadmap.TimePriority;
 import com.bmwcarit.barefoot.spatial.Geography;
 import com.bmwcarit.barefoot.topology.Dijkstra;
 import com.bmwcarit.barefoot.util.SourceException;
@@ -67,7 +67,7 @@ public class BFConfiguration {
             @Value("${barefoot.matcher.maxdistance}") double maxDistance) {
         Matcher matcher = new Matcher(map,
                 new Dijkstra<>(),
-                new TimePriority(),
+                new Distance(),
                 new Geography());
         matcher.setSigma(sigma);
         matcher.setLambda(lambda);
