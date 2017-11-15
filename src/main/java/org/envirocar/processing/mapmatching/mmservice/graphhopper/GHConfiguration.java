@@ -53,11 +53,16 @@ public class GHConfiguration {
     }
 
     @Bean
-    public MapMatching provideMapMatching(AbstractFlagEncoder encoder, GraphHopper hopper) {
+    public MapMatching provideMapMatching(
+            @Value("${graphhopper.osmdata.location}") double sigma,
+            @Value("${graphhopper.osmdata.location}") double beta,
+            AbstractFlagEncoder encoder, GraphHopper hopper) {
         String algorithm = Parameters.Algorithms.DIJKSTRA_BI;
         Weighting weighting = new FastestWeighting(encoder);
         AlgorithmOptions algoOptions = new AlgorithmOptions(algorithm, weighting);
         MapMatching mapMatching = new MapMatching(hopper, algoOptions);
+        mapMatching.setMeasurementErrorSigma(sigma);
+        mapMatching.setTransitionProbabilityBeta(beta);
         return mapMatching;
     }
 }
