@@ -25,6 +25,7 @@ import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.weighting.FastestWeighting;
 import com.graphhopper.routing.weighting.Weighting;
 import com.graphhopper.util.Parameters;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.Bean;
  *
  * @author dewall
  */
-//@Configuration
+@Configuration
 public class GHConfiguration {
 
     @Bean
@@ -64,5 +65,12 @@ public class GHConfiguration {
         mapMatching.setMeasurementErrorSigma(sigma);
         mapMatching.setTransitionProbabilityBeta(beta);
         return mapMatching;
+    }
+
+    @Bean
+    public GHMapMatcherService providerMapMatcher(
+            MapMatching mapMatching,
+            GeometryFactory geometryFactory) {
+        return new GHMapMatcherService(mapMatching, geometryFactory);
     }
 }

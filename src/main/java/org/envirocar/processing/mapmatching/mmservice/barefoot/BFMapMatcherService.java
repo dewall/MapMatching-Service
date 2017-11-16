@@ -46,7 +46,6 @@ import org.springframework.stereotype.Component;
  *
  * @author dewall
  */
-@Component
 public class BFMapMatcherService implements MapMatcherService {
 
     private final GeometryFactory geometryFactory;
@@ -63,12 +62,8 @@ public class BFMapMatcherService implements MapMatcherService {
      * @param minInterval
      * @param matcher
      */
-    @Autowired
-    public BFMapMatcherService(
-            @Value("${barefoot.matcher.mindistance}") int minDistance,
-            @Value("${barefoot.matcher.mininterval}") int minInterval,
-            GeometryFactory geometryFactory,
-            Matcher matcher) {
+    public BFMapMatcherService(int minDistance, int minInterval,
+            GeometryFactory geometryFactory, Matcher matcher) {
         this.geometryFactory = geometryFactory;
         this.matcher = matcher;
 
@@ -81,7 +76,8 @@ public class BFMapMatcherService implements MapMatcherService {
         MapMatchingResult result = new MapMatchingResult();
 
         MatcherKState state = this.matcher.mmatch(
-                getAsMatcherSamples(input.getCandidates()), this.minDistance, this.minInterval);
+                getAsMatcherSamples(input.getCandidates()), this.minDistance,
+                this.minInterval);
 
         List<Coordinate> coordinates = new ArrayList<>();
         for (MatcherCandidate candidate : state.sequence()) {

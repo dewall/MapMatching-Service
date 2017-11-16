@@ -24,6 +24,7 @@ import com.bmwcarit.barefoot.spatial.Geography;
 import com.bmwcarit.barefoot.topology.Dijkstra;
 import com.bmwcarit.barefoot.util.SourceException;
 import com.bmwcarit.barefoot.util.Tuple;
+import org.locationtech.jts.geom.GeometryFactory;
 import java.io.IOException;
 import java.util.Map;
 import org.json.JSONException;
@@ -74,5 +75,15 @@ public class BFConfiguration {
         matcher.setMaxDistance(maxDistance);
         matcher.setMaxRadius(maxRadius);
         return matcher;
+    }
+
+    @Bean
+    public BFMapMatcherService provideMatcherService(
+            @Value("${barefoot.matcher.mindistance}") int minDistance,
+            @Value("${barefoot.matcher.mininterval}") int minInterval,
+            GeometryFactory geometryFactory,
+            Matcher matcher) {
+        return new BFMapMatcherService(minDistance, minInterval,
+                geometryFactory, matcher);
     }
 }

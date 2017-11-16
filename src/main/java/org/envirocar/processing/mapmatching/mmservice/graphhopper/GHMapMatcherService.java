@@ -32,20 +32,24 @@ import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
-import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author dewall
  */
-//@Component
 public class GHMapMatcherService implements MapMatcherService {
 
     private final MapMatching mapMatching;
     private final GeometryFactory geometryFactory;
 
-    @Autowired
+    /**
+     * Constructor.
+     *
+     * @param mapMatching
+     * @param geometryFactory
+     */
     public GHMapMatcherService(MapMatching mapMatching,
             GeometryFactory geometryFactory) {
         this.mapMatching = mapMatching;
