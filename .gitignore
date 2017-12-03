@@ -1,2 +1,5 @@
 /target/
 etc/map-data/
+.classpath
+.project
+.settings/
