@@ -15,10 +15,54 @@
  */
 package org.envirocar.processing.mapmatching.mmservice.valhalla;
 
+import org.locationtech.jts.geom.MultiLineString;
+
 /**
  *
  * @author dewall
  */
 public class ValhallaResponse {
+
+    private int status;
+    private String message;
+    private Feature data;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Feature getData() {
+        return data;
+    }
+
+    public void setData(Feature data) {
+        this.data = data;
+    }
+
+    public static class Feature {
+
+        private MultiLineString geometry;
+
+        public MultiLineString getGeometry() {
+            return geometry;
+        }
+
+        public void setGeometry(MultiLineString geometry) {
+            this.geometry = geometry;
+        }
+
+    }
 
 }

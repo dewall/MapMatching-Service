@@ -16,7 +16,6 @@
 package org.envirocar.processing.mapmatching.mmservice.valhalla;
 
 import org.locationtech.jts.geom.LineString;
-import org.springframework.web.bind.annotation.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -28,5 +27,5 @@ import retrofit2.http.POST;
 public interface ValhallaService {
 
     @POST("/")
-    Call<ResponseBody> doMapMatching(@Body LineString lineString);
+    Call<ValhallaResponse> doMapMatching(@Body LineString lineString);
 }

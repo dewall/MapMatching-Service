@@ -16,8 +16,10 @@
 package org.envirocar.processing.mapmatching.mmservice.valhalla;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -25,6 +27,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  *
  * @author dewall
  */
+@Configuration
 public class ValhallaConfiguration {
 
     @Bean
@@ -38,5 +41,10 @@ public class ValhallaConfiguration {
     @Bean
     public ValhallaService provideValhallaService(Retrofit retrofit) {
         return retrofit.create(ValhallaService.class);
+    }
+
+    @Bean
+    public ValhallaMapMatcherService provideValhallaMapMatcher(ValhallaService service, GeometryFactory factory) {
+        return new ValhallaMapMatcherService(service, factory);
     }
 }

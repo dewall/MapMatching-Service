@@ -25,7 +25,6 @@ import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -53,10 +52,13 @@ public class ValhallaMapMatcherService implements MapMatcherService {
                 .toArray(n -> new Coordinate[n]);
         LineString createLineString = factory.createLineString(coordinates);
 
-        Call<ResponseBody> doMapMatching = service.doMapMatching(createLineString);
+        Call<ValhallaResponse> doMapMatching = service.doMapMatching(createLineString);
         try {
-            Response<ResponseBody> execute = doMapMatching.execute();
-//            execute.body().
+            Response<ValhallaResponse> execute = doMapMatching.execute();
+            ValhallaResponse body = execute.body();
+            MapMatchingResult result = new MapMatchingResult();
+            result.setMatchedRoute((LineString) body.getData().getGeometry().getGeometryN(0));
+            return result;
         } catch (IOException ex) {
             Logger.getLogger(ValhallaMapMatcherService.class.getName()).log(Level.SEVERE, null, ex);
         }

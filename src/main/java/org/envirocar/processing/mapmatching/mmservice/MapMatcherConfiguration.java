@@ -15,6 +15,7 @@
  */
 package org.envirocar.processing.mapmatching.mmservice;
 
+import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -36,7 +37,7 @@ public class MapMatcherConfiguration extends WebMvcConfigurationSupport {
         return new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .registerModule(new MMSerializationModule())
-                .registerModule(new JtsToGeoJSONModule());
+                .registerModule(new JtsModule());
     }
 
     @Bean

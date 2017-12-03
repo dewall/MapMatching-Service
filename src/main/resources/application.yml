@@ -26,3 +26,8 @@ barefoot:
         user: postgres
         pass: postgres
     routetype: etc/map-data/road-types.json
+    
+valhalla:
+    service:
+        url: http://localhost:8002
+    

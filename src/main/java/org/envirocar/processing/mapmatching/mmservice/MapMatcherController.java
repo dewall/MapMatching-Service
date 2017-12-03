@@ -56,12 +56,12 @@ public class MapMatcherController {
     @Autowired
     public MapMatcherController(
             //            GHMapMatcherService mapMatcher,
-            BFMapMatcherService mapMatcherBF,
+//            BFMapMatcherService mapMatcherBF,
             ValhallaMapMatcherService mapMatcherVH,
             ObjectMapper objectMapper) {
 //        this.mapMatcher = mapMatcher;
         this.mapMatcher = null;
-        this.mapMatcherBF = mapMatcherBF;
+        this.mapMatcherBF = null;
         this.mapMatcherVH = mapMatcherVH;
         this.objectMapper = objectMapper;
     }

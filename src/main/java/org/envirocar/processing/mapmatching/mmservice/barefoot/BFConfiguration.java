@@ -30,13 +30,12 @@ import java.util.Map;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  *
  * @author dewall
  */
-@Configuration
+//@Configuration
 public class BFConfiguration {
 
     @Bean
