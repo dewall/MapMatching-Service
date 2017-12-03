@@ -38,6 +38,7 @@ import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
+import org.json.JSONException;
 
 /**
  *
@@ -124,6 +125,8 @@ public class BFMapMatcherService implements MapMatcherService {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(BFMapMatcherService.class.getName()).
                     log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            Logger.getLogger(BFMapMatcherService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

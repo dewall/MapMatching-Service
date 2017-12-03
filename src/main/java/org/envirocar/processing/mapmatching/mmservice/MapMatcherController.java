@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.envirocar.processing.mapmatching.mmservice.barefoot.BFMapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
+import org.envirocar.processing.mapmatching.mmservice.valhalla.ValhallaMapMatcherService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,11 +43,13 @@ public class MapMatcherController {
 
     private final MapMatcherService mapMatcher;
     private final BFMapMatcherService mapMatcherBF;
+    private final ValhallaMapMatcherService mapMatcherVH;
     private final ObjectMapper objectMapper;
 
     /**
      *
      * @param mapMatcher
+     * @param mapMatcherVH
      * @param mapMatcherBF
      * @param objectMapper
      */
@@ -54,17 +57,18 @@ public class MapMatcherController {
     public MapMatcherController(
             //            GHMapMatcherService mapMatcher,
             BFMapMatcherService mapMatcherBF,
+            ValhallaMapMatcherService mapMatcherVH,
             ObjectMapper objectMapper) {
 //        this.mapMatcher = mapMatcher;
         this.mapMatcher = null;
         this.mapMatcherBF = mapMatcherBF;
+        this.mapMatcherVH = mapMatcherVH;
         this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "/graphhopper", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws
-            IOException, ParseException {
+    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws IOException, ParseException {
         String requestString = toInputString(request);
         MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
@@ -75,13 +79,23 @@ public class MapMatcherController {
 
     @RequestMapping(value = "/barefoot", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchWithBarefoot(HttpServletRequest request) throws
-            IOException, ParseException {
+    public ResponseEntity matchWithBarefoot(HttpServletRequest request) throws IOException, ParseException {
         String requestString = toInputString(request);
         MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
         // compute result
         MapMatchingResult result = mapMatcherBF.computeMapMatching(input);
+        return ResponseEntity.ok(objectMapper.writeValueAsString(result));
+    }
+
+    @RequestMapping(value = "/valhalla", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity matchWithValhalla(HttpServletRequest request) throws IOException, ParseException {
+        String requestString = toInputString(request);
+        MapMatchingInput input = MapMatchingInput.fromString(requestString);
+
+        // compute result
+        MapMatchingResult result = mapMatcherVH.computeMapMatching(input);
         return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 
