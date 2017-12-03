@@ -38,9 +38,6 @@ import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import org.envirocar.processing.mapmatching.mmservice.model.MatchedPoint;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  *
