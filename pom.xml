@@ -27,6 +27,7 @@
         <docker.plugin.version>1.0.0</docker.plugin.version>
         <spring.boot.mvn.version>2.0.0.M6</spring.boot.mvn.version>
         <spring.cloud.mvn.version>2.0.0.M4</spring.cloud.mvn.version>
+        <retrofit.version>2.3.0</retrofit.version>
         
         <graphhopper.version>0.9.0</graphhopper.version>
         <jsonsimple.version>1.1.1</jsonsimple.version>
@@ -62,6 +63,16 @@
             <artifactId>jts-io</artifactId>
             <version>${jts.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>${retrofit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-jackson</artifactId>
+            <version>${retrofit.version}</version>
+        </dependency>
         
         <!-- Spring dependencies -->
         <dependency>
@@ -72,11 +83,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>${spring.cloud.mvn.version}</version>
         </dependency>
         
         <!-- Other Dependencies -->
@@ -108,7 +114,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.mvn.version}</version>
                 <executions>
                     <execution>
                         <goals>
