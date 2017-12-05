@@ -19,8 +19,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
@@ -33,6 +32,8 @@ import retrofit2.Response;
  * @author dewall
  */
 public class ValhallaMapMatcherService implements MapMatcherService {
+
+    private static final Logger LOGGER = Logger.getLogger(ValhallaMapMatcherService.class);
 
     private final ValhallaService service;
     private final GeometryFactory factory;
@@ -57,10 +58,11 @@ public class ValhallaMapMatcherService implements MapMatcherService {
             Response<ValhallaResponse> execute = doMapMatching.execute();
             ValhallaResponse body = execute.body();
             MapMatchingResult result = new MapMatchingResult();
-            result.setMatchedRoute((LineString) body.getData().getGeometry().getGeometryN(0));
+            System.out.println(body.getData().getGeometry().getNumGeometries());
+            result.setMatchedRoute(body.getData().getGeometry());
             return result;
         } catch (IOException ex) {
-            Logger.getLogger(ValhallaMapMatcherService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Error while retrieving Map Matching result.");
         }
         return null;
     }

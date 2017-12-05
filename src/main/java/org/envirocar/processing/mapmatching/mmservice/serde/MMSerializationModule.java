@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import java.io.IOException;
 import java.util.HashMap;
@@ -65,7 +65,7 @@ public class MMSerializationModule extends SimpleModule implements
                 gen.writeObject(pointOnRoad);
             }
 
-            LineString lineString = value.getMatchedLineString();
+            Geometry lineString = value.getMatchedLineString();
             gen.writeObject(lineString);
 
             gen.writeEndArray();

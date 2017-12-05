@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiLineString;
 import org.locationtech.jts.geom.Point;
 import java.io.IOException;
 import static org.envirocar.processing.mapmatching.mmservice.serde.GeoJSONConstants.GEOJSON_COORDINATES;
@@ -47,6 +48,7 @@ public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants
     public JtsToGeoJSONModule() {
         addSerializer(new JTSPointSerializer());
         addSerializer(new JTSLineStringSerializer());
+        addSerializer(new JTSMultiLineStringSerializer());
     }
 
     public static final class JTSPointSerializer
@@ -129,5 +131,51 @@ public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants
             return LineString.class;
         }
 
+    }
+
+    public static final class JTSMultiLineStringSerializer extends JsonSerializer<MultiLineString> {
+
+        @Override
+        public void serialize(MultiLineString t, JsonGenerator gen, SerializerProvider serializers) throws IOException,
+                JsonProcessingException {
+
+            gen.writeStartObject();
+            gen.writeStringField(GEOJSON_TYPE, GEOJSON_FEATURE);
+            gen.writeObjectFieldStart(GEOJSON_GEOMETRY);
+            gen.writeStringField(GEOJSON_TYPE, t.getGeometryType());
+            gen.writeArrayFieldStart(GEOJSON_COORDINATES);
+
+            for (int i = 0, size = t.getNumGeometries(); i < size; i++) {
+                LineString lineString = (LineString) t.getGeometryN(i);
+                gen.writeStartArray();
+                // Coordinates
+                for (Coordinate point : lineString.getCoordinates()) {
+                    gen.writeStartArray();
+                    gen.writeNumber(point.x);
+                    gen.writeNumber(point.y);
+                    gen.writeEndArray();
+                }
+                gen.writeEndArray();
+            }
+
+            gen.writeEndArray();
+            gen.writeEndObject();
+
+            // Properties
+            Object userData = t.getUserData();
+            if (userData == null) {
+                gen.writeObjectFieldStart(GEOJSON_PROPERTIES);
+                gen.writeEndObject();
+            } else {
+                gen.writeObjectField(GEOJSON_PROPERTIES, t.getUserData());
+            }
+
+            gen.writeEndObject();
+        }
+
+        @Override
+        public Class<MultiLineString> handledType() {
+            return MultiLineString.class;
+        }
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.envirocar.processing.mapmatching.mmservice.model;
 
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class MapMatchingResult {
 
-    private LineString matchedRoute;
+    private Geometry matchedRoute;
     private List<MatchedPoint> matchedPoints;
 
     /**
@@ -50,7 +51,7 @@ public class MapMatchingResult {
         this.matchedPoints = matchedPoints;
     }
 
-    public LineString getMatchedLineString() {
+    public Geometry getMatchedLineString() {
         return matchedRoute;
     }
 
@@ -58,11 +59,11 @@ public class MapMatchingResult {
         this.matchedRoute = matchedString;
     }
 
-    public LineString getMatchedRoute() {
+    public Geometry getMatchedRoute() {
         return matchedRoute;
     }
 
-    public void setMatchedRoute(LineString matchedRoute) {
+    public void setMatchedRoute(Geometry matchedRoute) {
         this.matchedRoute = matchedRoute;
     }
 
