@@ -44,6 +44,9 @@ public class MMSerializationModule extends SimpleModule implements
         addSerializer(new MapMatchingResultSerDe());
     }
 
+    /**
+     * 
+     */
     private static final class MapMatchingResultSerDe extends JsonSerializer<MapMatchingResult> {
 
         @Override
