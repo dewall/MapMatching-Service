@@ -89,6 +89,9 @@ public class JtsToGeoJSONModule extends SimpleModule implements GeoJSONConstants
 
     }
 
+    /**
+     * 
+     */
     public static final class JTSLineStringSerializer
             extends JsonSerializer<LineString> {
 
