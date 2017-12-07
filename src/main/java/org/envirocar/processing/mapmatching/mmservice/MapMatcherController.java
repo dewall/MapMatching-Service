@@ -22,6 +22,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.envirocar.processing.mapmatching.mmservice.barefoot.BFMapMatcherService;
+import org.envirocar.processing.mapmatching.mmservice.graphhopper.GHMapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.valhalla.ValhallaMapMatcherService;
 import org.json.simple.parser.ParseException;
@@ -41,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/mapmatching")
 public class MapMatcherController {
 
-    private final MapMatcherService mapMatcher;
+    private final MapMatcherService mapMatcherGH;
     private final BFMapMatcherService mapMatcherBF;
     private final ValhallaMapMatcherService mapMatcherVH;
     private final ObjectMapper objectMapper;
@@ -55,13 +56,12 @@ public class MapMatcherController {
      */
     @Autowired
     public MapMatcherController(
-            //            GHMapMatcherService mapMatcher,
-//            BFMapMatcherService mapMatcherBF,
+            GHMapMatcherService mapMatcherGH,
+            BFMapMatcherService mapMatcherBF,
             ValhallaMapMatcherService mapMatcherVH,
             ObjectMapper objectMapper) {
-//        this.mapMatcher = mapMatcher;
-        this.mapMatcher = null;
-        this.mapMatcherBF = null;
+        this.mapMatcherGH = mapMatcherGH;
+        this.mapMatcherBF = mapMatcherBF;
         this.mapMatcherVH = mapMatcherVH;
         this.objectMapper = objectMapper;
     }
@@ -73,7 +73,7 @@ public class MapMatcherController {
         MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
         // compute result
-        MapMatchingResult result = mapMatcher.computeMapMatching(input);
+        MapMatchingResult result = mapMatcherGH.computeMapMatching(input);
         return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 
