@@ -22,6 +22,8 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.envirocar.processing.mapmatching.mmservice.barefoot.BFMapMatcherService;
+import org.envirocar.processing.mapmatching.mmservice.graphhopper.GHMapMatcherService;
+import org.envirocar.processing.mapmatching.mmservice.mapbox.MapboxMapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.valhalla.ValhallaMapMatcherService;
 import org.json.simple.parser.ParseException;
@@ -41,28 +43,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/mapmatching")
 public class MapMatcherController {
 
-    private final MapMatcherService mapMatcher;
+    private final MapMatcherService mapMatcherGH;
     private final BFMapMatcherService mapMatcherBF;
     private final ValhallaMapMatcherService mapMatcherVH;
     private final ObjectMapper objectMapper;
+    private final MapboxMapMatcherService mapMatcherMB;
 
     /**
      *
-     * @param mapMatcher
+     * @param mapMatcherGH
      * @param mapMatcherVH
      * @param mapMatcherBF
+     * @param mapMatcherMB
      * @param objectMapper
      */
     @Autowired
     public MapMatcherController(
-            //            GHMapMatcherService mapMatcher,
+//            GHMapMatcherService mapMatcherGH,
 //            BFMapMatcherService mapMatcherBF,
-            ValhallaMapMatcherService mapMatcherVH,
+//            ValhallaMapMatcherService mapMatcherVH,
+            MapboxMapMatcherService mapMatcherMB,
             ObjectMapper objectMapper) {
-//        this.mapMatcher = mapMatcher;
-        this.mapMatcher = null;
+        this.mapMatcherGH = null;
         this.mapMatcherBF = null;
-        this.mapMatcherVH = mapMatcherVH;
+        this.mapMatcherVH = null;
+        this.mapMatcherMB = mapMatcherMB;
         this.objectMapper = objectMapper;
     }
 
@@ -73,7 +78,7 @@ public class MapMatcherController {
         MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
         // compute result
-        MapMatchingResult result = mapMatcher.computeMapMatching(input);
+        MapMatchingResult result = mapMatcherGH.computeMapMatching(input);
         return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 
@@ -96,6 +101,17 @@ public class MapMatcherController {
 
         // compute result
         MapMatchingResult result = mapMatcherVH.computeMapMatching(input);
+        return ResponseEntity.ok(objectMapper.writeValueAsString(result));
+    }
+
+    @RequestMapping(value = "/mapbox", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity matchWithMapBox(HttpServletRequest request) throws IOException, ParseException {
+        String requestString = toInputString(request);
+        MapMatchingInput input = MapMatchingInput.fromString(requestString);
+
+        // compute result
+        MapMatchingResult result = mapMatcherMB.computeMapMatching(input);
         return ResponseEntity.ok(objectMapper.writeValueAsString(result));
     }
 
