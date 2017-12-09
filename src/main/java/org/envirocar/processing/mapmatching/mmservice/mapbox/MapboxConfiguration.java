@@ -30,7 +30,7 @@ public class MapboxConfiguration {
     public MapboxMapMatcherService provideMapBox(
             @Value("${mapbox.accesstoken}") String accessToken,
             @Value("${mapbox.matcher.pagelimit}") int pageLimit,
-            @Value("${mapbox.matcher.pageoverlap") int pageOverlap) {
+            @Value("${mapbox.matcher.pageoverlap}") int pageOverlap) {
         return new MapboxMapMatcherService(accessToken, pageLimit, pageOverlap);
     }
 }

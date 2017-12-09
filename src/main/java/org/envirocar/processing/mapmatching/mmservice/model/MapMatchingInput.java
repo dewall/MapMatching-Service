@@ -63,6 +63,11 @@ public class MapMatchingInput {
             String id = (String) properties.get("id");
             String timeString = (String) properties.get("time");
 
+            // Get the GPS Accuracy
+            JSONObject phenomenons = (JSONObject) properties.get("phenomenons");
+            JSONObject gpsAccuracy = (JSONObject) phenomenons.get("GPS Accuracy");
+            double accuracy = (Double) gpsAccuracy.get("value");
+
             Date time = null;
             try {
                 time = DATE_FORMAT.parse(timeString);
@@ -70,6 +75,7 @@ public class MapMatchingInput {
                         new Coordinate(longitude, latitude));
                 MapMatchingCandidate e = new MapMatchingCandidate(
                         id, time, point);
+                e.setAccuracy(accuracy);
                 result.addCandidate(e);
             } catch (java.text.ParseException ex) {
                 Logger.getLogger(MapMatchingInput.class.getName()).log(

@@ -32,6 +32,7 @@ public class MapMatchingCandidate {
     private String id;
     private Date time;
     private Point point;
+    private double accuracy;
 
     /**
      * Constructor.
@@ -74,6 +75,14 @@ public class MapMatchingCandidate {
 
     public void setPoint(Point point) {
         this.point = point;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
     }
 
 }

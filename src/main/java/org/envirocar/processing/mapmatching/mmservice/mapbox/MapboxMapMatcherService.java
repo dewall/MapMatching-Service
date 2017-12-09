@@ -26,7 +26,9 @@ import org.locationtech.jts.geom.LineString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
+import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingResult;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,11 +47,13 @@ public class MapboxMapMatcherService implements MapMatcherService {
      * Constructor.
      *
      * @param accessToken
+     * @param pageLimit
+     * @param pageOverlap
      */
     public MapboxMapMatcherService(
             @Value("${mapbox.accesstoken}") String accessToken,
             @Value("${mapbox.matcher.pagelimit}") int pageLimit,
-            @Value("${mapbox.matcher.pageoverlap") int pageOverlap) {
+            @Value("${mapbox.matcher.pageoverlap}") int pageOverlap) {
         this.accessToken = accessToken;
         this.pageLimit = pageLimit;
         this.pageOverlap = pageOverlap;
@@ -59,10 +63,27 @@ public class MapboxMapMatcherService implements MapMatcherService {
     public MapMatchingResult computeMapMatching(MapMatchingInput input) {
         MapMatchingResult result = new MapMatchingResult();
 
-        Position[] positions = input.getCandidates()
-                .stream()
-                .map(c -> Position.fromLngLat(c.getPoint().getX(), c.getPoint().getY()))
-                .toArray((value) -> new Position[value]);
+        List<Position> positionList = new ArrayList<>();
+        List<Double> accuracyList = new ArrayList<>();
+        List<Long> timestampList = new ArrayList<>();
+        for (MapMatchingCandidate candidate : input.getCandidates()) {
+            positionList.add(Position.fromLngLat(candidate.getPoint().getX(), candidate.getPoint().getY()));
+            if (candidate.getAccuracy() > 40.0) {
+                accuracyList.add(40.0);
+            } else {
+                accuracyList.add(candidate.getAccuracy());
+            }
+            timestampList.add(candidate.getTime().getTime());
+        }
+        Position[] positions = positionList.toArray(new Position[positionList.size()]);
+        double[] accuracies = new double[accuracyList.size()];
+        for (int i = 0; i < accuracyList.size(); i++) {
+            accuracies[i] = accuracyList.get(i);
+        }
+        String[] timestamps = new String[timestampList.size()];
+        for(int i = 0; i < timestampList.size(); i++){
+            timestamps[i] = timestampList.get(i).toString();
+        }
 
         int offset = 0;
         List<Coordinate> coords = new ArrayList<>();
@@ -75,10 +96,15 @@ public class MapboxMapMatcherService implements MapMatcherService {
             int upperBound = Math.min(offset + pageLimit, positions.length);
 
             Position[] page = Arrays.copyOfRange(positions, lowerBound, upperBound);
+            double[] pageAcc = Arrays.copyOfRange(accuracies, lowerBound, upperBound);
+            String[] pageTime = Arrays.copyOfRange(timestamps, lowerBound, upperBound);
 
+            // TODO mapbox rejects requests with uncertainties of >50m
             MapboxMapMatchingRx rxMapMatcher = new MapboxMapMatchingRx.Builder()
                     .setAccessToken(accessToken)
                     .setCoordinates(page)
+                    .setRadiuses(pageAcc)
+                    .setTimestamps(pageTime)
                     .setOverview(MapMatchingCriteria.OVERVIEW_FULL)
                     .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
                     .build();
@@ -93,7 +119,7 @@ public class MapboxMapMatcherService implements MapMatcherService {
 
             offset = upperBound;
         }
-        
+
         // TODO a simple merge does not work properly
         LineString mls = new GeometryFactory().createLineString(coords.toArray(
                 new Coordinate[coords.size()]));
