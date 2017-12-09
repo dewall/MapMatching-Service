@@ -23,6 +23,8 @@ import com.mapbox.services.commons.utils.PolylineUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
@@ -36,14 +38,21 @@ import org.springframework.beans.factory.annotation.Value;
 public class MapboxMapMatcherService implements MapMatcherService {
 
     private final String accessToken;
+    private final int pageLimit;
+    private final int pageOverlap;
 
     /**
      * Constructor.
      *
      * @param accessToken
      */
-    public MapboxMapMatcherService(@Value("${mapbox.accesstoken}") String accessToken) {
+    public MapboxMapMatcherService(
+            @Value("${mapbox.accesstoken}") String accessToken,
+            @Value("${mapbox.matcher.pagelimit}") int pageLimit,
+            @Value("${mapbox.matcher.pageoverlap") int pageOverlap) {
         this.accessToken = accessToken;
+        this.pageLimit = pageLimit;
+        this.pageOverlap = pageOverlap;
     }
 
     @Override
@@ -55,22 +64,40 @@ public class MapboxMapMatcherService implements MapMatcherService {
                 .map(c -> Position.fromLngLat(c.getPoint().getX(), c.getPoint().getY()))
                 .toArray((value) -> new Position[value]);
 
-        MapboxMapMatchingRx rxMapMatcher = new MapboxMapMatchingRx.Builder()
-                .setAccessToken(accessToken)
-                .setCoordinates(positions)
-                .setOverview(MapMatchingCriteria.OVERVIEW_FULL)
-                .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
-                .build();
+        int offset = 0;
+        List<Coordinate> coords = new ArrayList<>();
+        while (offset < positions.length) {
+            if (offset > 0) {
+                offset -= pageOverlap;
+            }
 
-        rxMapMatcher.getObservable()
-                .subscribe((MapMatchingResponse t) -> {
-                    List<Position> decode = PolylineUtils.decode(t.getMatchings().get(0).getGeometry(), 6);
-                    Coordinate[] coordinates = decode.stream()
-                            .map(p -> new Coordinate(p.getLongitude(), p.getLatitude()))
-                            .toArray(i -> new Coordinate[i]);
-                    LineString lineString = new GeometryFactory().createLineString(coordinates);
-                    result.setMatchedLineString(lineString);
-                });
+            int lowerBound = offset;
+            int upperBound = Math.min(offset + pageLimit, positions.length);
+
+            Position[] page = Arrays.copyOfRange(positions, lowerBound, upperBound);
+
+            MapboxMapMatchingRx rxMapMatcher = new MapboxMapMatchingRx.Builder()
+                    .setAccessToken(accessToken)
+                    .setCoordinates(page)
+                    .setOverview(MapMatchingCriteria.OVERVIEW_FULL)
+                    .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
+                    .build();
+
+            rxMapMatcher.getObservable()
+                    .subscribe((MapMatchingResponse t) -> {
+                        List<Position> decode = PolylineUtils.decode(t.getMatchings().get(0).getGeometry(), 6);
+                        decode.stream()
+                                .map(p -> new Coordinate(p.getLongitude(), p.getLatitude()))
+                                .forEach(c -> coords.add(c));
+                    });
+
+            offset = upperBound;
+        }
+        
+        // TODO a simple merge does not work properly
+        LineString mls = new GeometryFactory().createLineString(coords.toArray(
+                new Coordinate[coords.size()]));
+        result.setMatchedLineString((LineString) mls);
 
         return result;
     }

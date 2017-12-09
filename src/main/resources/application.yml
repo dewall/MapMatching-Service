@@ -30,4 +30,8 @@ barefoot:
 valhalla:
     service:
         url: http://localhost:8002
-    
+
+mapbox:
+    matcher:
+        pagelimit: 100
+        pageoverlap: 5

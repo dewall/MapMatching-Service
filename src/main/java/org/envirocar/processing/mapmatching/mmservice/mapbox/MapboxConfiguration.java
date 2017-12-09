@@ -27,7 +27,10 @@ import org.springframework.context.annotation.Configuration;
 public class MapboxConfiguration {
 
     @Bean
-    public MapboxMapMatcherService provideMapBox(@Value("${mapbox.accesstoken}") String token) {
-        return new MapboxMapMatcherService(token);
+    public MapboxMapMatcherService provideMapBox(
+            @Value("${mapbox.accesstoken}") String accessToken,
+            @Value("${mapbox.matcher.pagelimit}") int pageLimit,
+            @Value("${mapbox.matcher.pageoverlap") int pageOverlap) {
+        return new MapboxMapMatcherService(accessToken, pageLimit, pageOverlap);
     }
 }
