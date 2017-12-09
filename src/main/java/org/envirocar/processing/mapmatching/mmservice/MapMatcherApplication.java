@@ -30,6 +30,7 @@ public class MapMatcherApplication {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(MapMatcherApplication.class)
+                .properties("spring.config.name:application,secret")
                 .web(true)
                 .bannerMode(Banner.Mode.CONSOLE)
                 .run(args);
