@@ -71,16 +71,7 @@ public class MapMatcherController {
         this.objectMapper = objectMapper;
     }
 
-    @RequestMapping(value = "/graphhopper", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws IOException, ParseException {
-        String requestString = toInputString(request);
-        MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
-        // compute result
-        MapMatchingResult result = mapMatcherGH.computeMapMatching(input);
-        return ResponseEntity.ok(objectMapper.writeValueAsString(result));
-    }
 
     @RequestMapping(value = "/barefoot", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
