@@ -17,7 +17,7 @@ graphhopper:
         sigma: 45
         beta: 2.0
     osmdata:
-        location: etc/map-data/osm-data.osm.pbf
+        location: ../etc/map-data/osm-data.osm.pbf
 
 ---
 
