@@ -3,3 +3,9 @@ etc/map-data/
 .classpath
 .project
 .settings/
+**/secret.yml
+/core/target/
+/graphhopper/target/
+/mapbox/target/
+/barefoot/target/
+/valhalla/target/

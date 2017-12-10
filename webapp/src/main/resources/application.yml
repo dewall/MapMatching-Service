@@ -1,0 +1,61 @@
+spring:
+    application:
+        name: MapMatcher
+    profiles:
+        active: graphhopper,valhalla,mapbox
+
+server:
+    port: 8080
+
+---
+
+spring:
+    profiles: graphhopper
+
+graphhopper:
+    matcher:
+        sigma: 45
+        beta: 2.0
+    osmdata:
+        location: ../etc/map-data/osm-data.osm.pbf
+
+---
+
+spring:
+    profiles: barefoot
+    
+barefoot:
+    matcher:
+        sigma: 45
+        lambda: 0.1
+        maxradius: 75
+        maxdistance: 1000 
+        mindistance: 20
+        mininterval: 5000
+    postgis:
+        host: localhost
+        port: 5432
+        database: osmdata
+        table: bfmap_ways
+        user: postgres
+        pass: postgres
+    routetype: etc/map-data/road-types.json
+    
+--- 
+
+spring:
+    profiles: valhalla
+    
+valhalla:
+    service:
+        url: http://localhost:8002
+        
+---
+
+spring:
+    profiles: mapbox
+
+mapbox:
+    matcher:
+        pagelimit: 100
+        pageoverlap: 5
