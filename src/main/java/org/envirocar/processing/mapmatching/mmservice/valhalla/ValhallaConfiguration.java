@@ -20,6 +20,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -28,6 +29,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  * @author dewall
  */
 @Configuration
+@Profile("valhalla")
 public class ValhallaConfiguration {
 
     @Bean

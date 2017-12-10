@@ -1,7 +1,16 @@
-spring.application.name: MapMatcher
+spring:
+    application:
+        name: MapMatcher
+    profiles:
+        active: graphhopper,valhalla,mapbox
 
 server:
     port: 8080
+
+---
+
+spring:
+    profiles: graphhopper
 
 graphhopper:
     matcher:
@@ -10,6 +19,11 @@ graphhopper:
     osmdata:
         location: etc/map-data/osm-data.osm.pbf
 
+---
+
+spring:
+    profiles: barefoot
+    
 barefoot:
     matcher:
         sigma: 45
@@ -27,9 +41,19 @@ barefoot:
         pass: postgres
     routetype: etc/map-data/road-types.json
     
+--- 
+
+spring:
+    profiles: valhalla
+    
 valhalla:
     service:
         url: http://localhost:8002
+        
+---
+
+spring:
+    profiles: mapbox
 
 mapbox:
     matcher:

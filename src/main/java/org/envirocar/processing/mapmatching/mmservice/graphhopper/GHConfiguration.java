@@ -28,12 +28,15 @@ import com.graphhopper.util.Parameters;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  *
  * @author dewall
  */
-//@Configuration
+@Configuration
+@Profile("graphhopper")
 public class GHConfiguration {
 
     @Bean

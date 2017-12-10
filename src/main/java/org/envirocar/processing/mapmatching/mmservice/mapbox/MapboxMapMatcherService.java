@@ -26,7 +26,6 @@ import org.locationtech.jts.geom.LineString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 import org.envirocar.processing.mapmatching.mmservice.MapMatcherService;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingCandidate;
 import org.envirocar.processing.mapmatching.mmservice.model.MapMatchingInput;
@@ -121,9 +120,9 @@ public class MapboxMapMatcherService implements MapMatcherService {
         }
 
         // TODO a simple merge does not work properly
-        LineString mls = new GeometryFactory().createLineString(coords.toArray(
+        LineString ls = new GeometryFactory().createLineString(coords.toArray(
                 new Coordinate[coords.size()]));
-        result.setMatchedLineString((LineString) mls);
+        result.setMatchedLineString(ls);
 
         return result;
     }
