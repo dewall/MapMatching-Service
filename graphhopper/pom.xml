@@ -15,6 +15,12 @@
     
     <dependencies>
         <dependency>
+            <groupId>org.envirocar.processing.mapmatching.mmservice</groupId>
+            <artifactId>core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.graphhopper</groupId>
             <artifactId>graphhopper-map-matching-core</artifactId>
             <exclusions>

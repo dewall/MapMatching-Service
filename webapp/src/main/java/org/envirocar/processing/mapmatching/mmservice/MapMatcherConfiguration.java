@@ -19,7 +19,7 @@ import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.envirocar.processing.mapmatching.mmservice.serde.MMSerializationModule;
+import org.envirocar.processing.mapmatching.mmservice.core.serde.MMSerializationModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
