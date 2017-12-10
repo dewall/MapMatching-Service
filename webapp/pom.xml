@@ -14,9 +14,15 @@
     <description>MapMatching Service for enviroCar Tracks</description>
     
     <dependencies>
+        <!-- Module Dependencies -->
         <dependency>
             <groupId>org.envirocar.processing.mapmatching.mmservice</groupId>
             <artifactId>core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.envirocar.processing.mapmatching.mmservice</groupId>
+            <artifactId>graphhopper</artifactId>
             <version>${parent.version}</version>
         </dependency>
         
