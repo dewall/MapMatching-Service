@@ -43,6 +43,7 @@
         <joda.version>2.9.9</joda.version>
         <slf4j.version>1.7.25</slf4j.version>
         <jts.version>1.15.0</jts.version>
+        <apache.commons.version>2.6</apache.commons.version>
     </properties>
     
     <dependencyManagement>
@@ -87,7 +88,14 @@
                 <groupId>com.bedatadriven</groupId>
                 <artifactId>jackson-datatype-jts</artifactId>
                 <version>2.2</version>
-            </dependency>    
+            </dependency>
+            
+            <!-- Utilities -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${apache.commons.version}</version>
+            </dependency>
         
             <!-- Mapbox -->
             <dependency>
