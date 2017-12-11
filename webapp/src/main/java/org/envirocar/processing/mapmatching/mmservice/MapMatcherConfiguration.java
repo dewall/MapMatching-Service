@@ -19,6 +19,7 @@ import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.envirocar.processing.mapmatching.mmservice.core.serde.JtsToGeoJSONModule;
 import org.envirocar.processing.mapmatching.mmservice.core.serde.MMSerializationModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ public class MapMatcherConfiguration extends WebMvcConfigurationSupport {
         return new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .registerModule(new MMSerializationModule())
-                .registerModule(new JtsModule());
+                .registerModule(new JtsToGeoJSONModule());
     }
 
     @Bean
