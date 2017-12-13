@@ -32,6 +32,7 @@ barefoot:
         maxdistance: 1000 
         mindistance: 20
         mininterval: 5000
+        costfunction: distance
     postgis:
         host: localhost
         port: 5432
