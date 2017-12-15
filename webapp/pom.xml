@@ -10,7 +10,7 @@
     <artifactId>webapp</artifactId>
     <packaging>jar</packaging>
 
-    <name>enviroCar Processing - MapMatching Service (WebApp)</name>
+    <name>enviroCar Processing - MapMatching Service (Web)</name>
     <description>MapMatching Service for enviroCar Tracks</description>
     
     <dependencies>
