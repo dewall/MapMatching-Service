@@ -19,8 +19,12 @@ import com.bmwcarit.barefoot.matcher.Matcher;
 import com.bmwcarit.barefoot.road.PostGISReader;
 import com.bmwcarit.barefoot.roadmap.Distance;
 import com.bmwcarit.barefoot.roadmap.Loader;
+import com.bmwcarit.barefoot.roadmap.Road;
 import com.bmwcarit.barefoot.roadmap.RoadMap;
+import com.bmwcarit.barefoot.roadmap.Time;
+import com.bmwcarit.barefoot.roadmap.TimePriority;
 import com.bmwcarit.barefoot.spatial.Geography;
+import com.bmwcarit.barefoot.topology.Cost;
 import com.bmwcarit.barefoot.topology.Dijkstra;
 import com.bmwcarit.barefoot.util.SourceException;
 import com.bmwcarit.barefoot.util.Tuple;
@@ -63,15 +67,31 @@ public class BFConfiguration {
     }
 
     @Bean
+    public Cost<Road> provideCostFunction(
+            @Value("${barefoot.matcher.costfunction}") String type) {
+        Cost<Road> costfunction = new Distance();
+        switch(type){
+            case "distance":
+                costfunction = new Distance();
+                break;
+            case "time":
+                costfunction = new Time();
+                break;
+            case "timepriority":
+                costfunction = new TimePriority();
+                break;  
+        }
+        return costfunction;
+    }
+
+    @Bean
     public Matcher provideMatcher(RoadMap map,
             @Value("${barefoot.matcher.sigma}") double sigma,
             @Value("${barefoot.matcher.lambda}") double lambda,
             @Value("${barefoot.matcher.maxradius}") double maxRadius,
-            @Value("${barefoot.matcher.maxdistance}") double maxDistance) {
-        Matcher matcher = new Matcher(map,
-                new Dijkstra<>(),
-                new Distance(),
-                new Geography());
+            @Value("${barefoot.matcher.maxdistance}") double maxDistance,
+            Cost<Road> costfunction) {
+        Matcher matcher = new Matcher(map, new Dijkstra<>(), costfunction, new Geography());
         matcher.setSigma(sigma);
         matcher.setLambda(lambda);
         matcher.setMaxDistance(maxDistance);
