@@ -24,11 +24,14 @@ import org.envirocar.processing.mapmatching.mmservice.core.model.MapMatchingInpu
 import org.envirocar.processing.mapmatching.mmservice.core.model.MapMatchingResult;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,15 +47,26 @@ public class GHController {
     private final ObjectMapper mapper;
     private final GHMapMatcherService service;
 
+    private final double defaultSigma;
+    private final double defaultBeta;
+
     @Autowired
-    public GHController(ObjectMapper mapper, GHMapMatcherService service) {
+    public GHController(ObjectMapper mapper,
+            GHMapMatcherService service,
+            @Value("${graphhopper.matcher.default_sigma}") double sigma,
+            @Value("${graphhopper.matcher.default_beta}") double beta) {
         this.service = service;
         this.mapper = mapper;
+        this.defaultSigma = sigma;
+        this.defaultBeta = beta;
     }
 
     @RequestMapping(value = "/graphhopper", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request) throws IOException, ParseException {
+    public ResponseEntity matchEnvirocarTrack(HttpServletRequest request,
+            @RequestParam(value = "sigma", defaultValue = "${graphhopper.matcher.default_sigma}") String sigma,
+            @RequestParam(value = "beta", defaultValue = "${graphhopper.matcher.default_beta}") String beta)
+            throws IOException, ParseException {
         String requestString = toInputString(request);
         MapMatchingInput input = MapMatchingInput.fromString(requestString);
 
