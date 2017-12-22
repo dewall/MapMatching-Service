@@ -19,10 +19,6 @@
     <modules>
         <module>webapp</module>
         <module>core</module>
-        <module>graphhopper</module>
-        <module>barefoot</module>
-        <module>mapbox</module>
-        <module>valhalla</module>
     </modules>
     
     <properties>
