@@ -30,8 +30,12 @@ import com.bmwcarit.barefoot.util.SourceException;
 import com.bmwcarit.barefoot.util.Tuple;
 import org.locationtech.jts.geom.GeometryFactory;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Map;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,10 +58,10 @@ public class BFConfiguration {
             @Value("${barefoot.postgis.user}") String user,
             @Value("${barefoot.postgis.pass}") String password) throws
             JSONException, IOException {
-        Map<Short, Tuple<Double, Integer>> read = Loader.read(
-                "etc/map-data/road-types.json");
-        return new PostGISReader(host, port, database, table, user, password,
-                read);
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(getClass().getResourceAsStream("/road-types.json"), writer, Charsets.UTF_8);
+        Map<Short, Tuple<Double, Integer>> read = Loader.roadtypes(new JSONObject(writer.toString()));
+        return new PostGISReader(host, port, database, table, user, password, read);
     }
 
     @Bean
@@ -70,7 +74,7 @@ public class BFConfiguration {
     public Cost<Road> provideCostFunction(
             @Value("${barefoot.matcher.costfunction}") String type) {
         Cost<Road> costfunction = new Distance();
-        switch(type){
+        switch (type) {
             case "distance":
                 costfunction = new Distance();
                 break;
@@ -79,7 +83,7 @@ public class BFConfiguration {
                 break;
             case "timepriority":
                 costfunction = new TimePriority();
-                break;  
+                break;
         }
         return costfunction;
     }
