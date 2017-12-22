@@ -25,6 +25,11 @@
             <artifactId>graphhopper</artifactId>
             <version>${parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.envirocar.processing.mapmatching.mmservice</groupId>
+            <artifactId>barefoot</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
