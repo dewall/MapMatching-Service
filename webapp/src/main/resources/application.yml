@@ -2,10 +2,10 @@ spring:
     application:
         name: MapMatcher
     profiles:
-        active: graphhopper,valhalla,mapbox
+        active: barefoot
 
 server:
-    port: 8080
+    port: 8081
 
 ---
 
@@ -34,10 +34,10 @@ barefoot:
         mininterval: 5000
         costfunction: distance
     postgis:
-        host: localhost
+        host: 172.17.0.2
         port: 5432
-        database: osmdata
-        table: bfmap_ways
+        database: gis
+        table: planet_osm_line
         user: postgres
         pass: postgres
     routetype: etc/map-data/road-types.json
