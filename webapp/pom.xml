@@ -20,16 +20,6 @@
             <artifactId>core</artifactId>
             <version>${parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.envirocar.processing.mapmatching.mmservice</groupId>
-            <artifactId>graphhopper</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.envirocar.processing.mapmatching.mmservice</groupId>
-            <artifactId>barefoot</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
         
         <!-- spring dependencies -->
         <dependency>
@@ -50,6 +40,7 @@
         <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-io</artifactId>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
@@ -67,6 +58,10 @@
         <dependency>
             <groupId>com.bmw-carit</groupId>
             <artifactId>barefoot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.graphhopper</groupId>
+            <artifactId>graphhopper-map-matching-core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

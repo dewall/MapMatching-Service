@@ -71,6 +71,7 @@
                 <groupId>org.locationtech.jts</groupId>
                 <artifactId>jts-io</artifactId>
                 <version>${jts.version}</version>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>com.squareup.retrofit2</groupId>
